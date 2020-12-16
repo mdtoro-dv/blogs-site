@@ -1,0 +1,112 @@
+head{
+	
+	height: 175px;
+        padding-left: 20%;
+     
+
+}
+section{
+	display: flex;
+	justify-content:right;
+	width: 100%;
+    padding-left: 20%; 
+}
+ 
+	
+
+input[type="submit"]{ 
+	background: blue;
+	color: white;
+	height: 35px;
+	border-radius: 50px;
+	width: 50%;
+	display: O;
+}
+
+.menuOpcion{
+    background-color:#8EAEFF;
+    color: black;
+    border: 2px solid blue;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.comentario {
+    background-color:blue;
+    color: white;
+    border: 2px solid blue;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+	
+
+input[type="submit"]{ 
+	background: blue;
+	color: white;
+	height: 35px;
+	border-radius: 500px;
+	width: 50%;
+}
+input[type="text1"]{ 
+	background: white;
+	color: black;
+	height: 90px;
+	width: 70%;
+}
+input[type="password"]{ 
+	background: white;
+	color: black;
+	height: 40px;
+	width: 70%;
+}
+
+
+
+#izquierda{
+	
+	
+	display: inline-block;
+	height: 375px;
+	width: 50%;
+	padding-right: 6%;
+        text-align: right;
+}
+
+input[name="actualizar"]{
+	background: blue;
+        border-radius: 14px;
+        text-align: center;
+}
+#derecha{
+	display: flex;
+	
+	display: inline-block;
+	height: 375px;
+	width: 49%;
+}
+
+#etiquetas{
+	display: inline-block;
+}
+
+#contenido_etiquetas{
+	display: inline-block;
+
+}
+
+.textBox{
+    background-image: url('../images/editar.png');
+    background-size: contain;   
+    background-position:right;   
+    background-repeat:no-repeat;
+    padding: 5px;
+  }
+
+  .iniciar, .opciones, .menu {
+    background-color: white;
+    color: black;
+    border: 2px solid blue;
+    border-radius: 4px;
+    padding: 8px;
+}

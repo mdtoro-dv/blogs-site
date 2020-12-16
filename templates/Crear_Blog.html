@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Crear blog</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/Principal.css')}}" type="text/css" media="all" />
+    </head>
+<body style="background-color: 8EAEFF;">
+    <table>
+        <thead>
+            <th style="width: 10%;"><img src="{{url_for('static', filename='images/LetraB.jpg')}}" alt="Logo.jpg" style="width: 50%;"></th>
+            <th style="width: 90%;"></th>
+        </thead>
+    </table>
+    <br>
+    <table style="width: 100%;">
+        <thead>
+            <th><input type="text" name="titulo" id="titulo" style="width: 100%; padding: 10px;" placeholder="Titulo del blog"></th>
+        </thead>
+        <tbody style="background-color: white;">
+        <tr>
+            <td style="border: 1px solid black;">
+                <textarea style="width: 100%; height: 100%;" rows="25" name="" id=""></textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table bgcolor="white">
+        <tbody>
+            <tr>
+                <td style="width: 5%;"><button class="herramientas" style="font-weight: bold !important;">B</button></td>
+                <td style="width: 5%;"><button class="herramientas" style="font-style: italic; font-family: 'Courier New', Courier, monospace;">I</button></td>
+                <td style="width: 5%;"><button class="herramientas"><u>U</u></button></td>
+                <td style="width: 5%;"><button class="herramientas">abc</button></td>
+                <td style="width: 5%;"><button class="herramientas">f</button></td>
+                <td style="width: 70%;"></td>
+                <td style="width: 5%;">
+                    <select name="tresPuntos" id=":">
+                        <option value="">:</option>
+                        <option value="Guardar">Guardar</option>
+                        <option value="inicio">Eliminar</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

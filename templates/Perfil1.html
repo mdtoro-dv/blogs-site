@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/Principal.css')}}" type="text/css" media="all" />
+    <script src="{{url_for('static', filename='js/Perfil1.js')}}"></script>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <th style="width: 5%;"><img src="{{url_for('static', filename='images/LetraB.jpg')}}" style="width: 50%; padding-left: 80%;" /></th>
+            <th style="width: 20%;">
+                <h3>The blogs company</3>
+            </th>
+            <th style="width: 45%;"></th>
+            <th style="width: 10%;">
+                <select name="Opciones" id="opciones" class="opciones" onchange="cerrarSesion(this)">
+                    <option value="">Opciones</option>
+                    <option value="cerrar">Cerrar sesión</option>
+                    <option value="inicio">Inicio</option>
+                </select>
+            </th>
+        </thead>
+    </table>
+    <section>
+        <table>
+            <thead>
+                <th style="width: 10%;">
+                    <img src="{{url_for('static', filename='images/Usuario.png')}}" alt="usuario" style="width: 100%;">
+                </th>
+                <th style="width: 20%;" valign="bottom">
+                    <input type="text" class="textBox" placeholder="Nombre del usuario (Nickname)" style="width: 100%;">
+                </th>
+                <th style="width: 70%;"></th>
+            </thead>
+        </table>
+        <br><br>
+        <div id="derecha">
+            <table style="margin-left: 20px; margin-right: 5px; width: 95%;">
+                <tr>
+                    <td><button class="comentario" style="width: 100%;">Información personal</button></td>
+                    <td><a href="/comentarios"><button class="menuopcion" style="width: 100%;">Mis
+                                comentarios</button></a></td>
+                    <td><a href="/eliminar-cuenta"><button class="menuOpcion" style="width: 100%;">Eliminar cuenta</button></a></td>
+                </tr>
+            </table>
+            <p>Cambiar nombre</p>
+            <input type="text" name="form_nombre" value="Nuevo nombre"> <br><br>
+            <p>Cambiar apellido</p>
+            <input type="text" name="form_apellido" value="Nuevo apellido"> <br><br><br>
+            <p>Cambiar correo</p>
+            <input type="text" name="form_correo" value="Nuevo correo"> <br><br>
+            <input type="submit" name="actualizar" value="Guardar">
+        </div>
+
+
+    </section>
+    <br>
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 75%"></td>
+            <td style="width: 10%" valign="center">2020</td>
+            <td style="width: 5%"><img style="width: 20px;" src="{{url_for('static', filename='images/in.jpeg')}}" alt="in"></td>
+            <td style="width: 5%"><img style="width: 20px;" src="{{url_for('static', filename='images/twitter.jpeg')}}" alt="twitter"></td>
+            <td style="width: 5%"><img style="width: 20px;" src="{{url_for('static', filename='images/facebook.jpeg')}}" alt="facebook"></td>
+        </tr>
+    </table>
+
+</body>
+</html>

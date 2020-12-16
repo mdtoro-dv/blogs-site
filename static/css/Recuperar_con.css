@@ -1,0 +1,61 @@
+header {
+    height: 175px;
+    padding-left: 10%;
+    text-align: left;
+}
+
+section {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+}
+
+input[type="submit"] {
+    background: blue;
+    color: white;
+    height: 35px;
+    border-radius: 20px;
+}
+
+input[type="text"] {
+    background: white;
+    color: black;
+    height: 22px;
+    width: 70%;
+}
+
+input[type="password"] {
+    background: white;
+    color: black;
+    height: 22px;
+    width: 70%;
+}
+
+#izquierda {
+    display: inline-block;
+    height: 375px;
+    width: 50%;
+    padding-right: 6%;
+    text-align: right;
+}
+
+input[name="actualizar"] {
+    background: blue;
+    border-radius: 14px;
+    text-align: center;
+}
+
+#derecha {
+    display: flex;
+    display: inline-block;
+    height: 375px;
+    width: 49%;
+}
+
+#etiquetas {
+    display: inline-block;
+}
+
+#contenido_etiquetas {
+    display: inline-block;
+}

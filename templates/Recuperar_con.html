@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Recuperar contraseña</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/Recuperar_con.css')}}" type="text/css" media="all" />
+</head>
+
+
+
+<body>
+    <header>
+        <img src="{{url_for('static', filename='images/LetraB.jpg')}}" width="3%" height="25%" vertical-align="middle" />
+        <span>The blogs company</span>
+    </header>
+    {% for message in get_flashed_messages() %}
+        <tr>
+            <td><div class="flash" style="background-color: red; color: white;"><center>{{message}}</center></div></td>
+        </tr>
+    {% endfor %}
+    <section>            
+            <div id="izquierda">
+                <form action="/cambiar-clave" method="POST">
+                    <p>confirmar correo* </p>
+                    Correo 
+                    <input type="text" name="correo" id="correo"> <br><br>
+                    <input type="submit" name="" value="Confirmar correo">
+                    <p>inhabilitado / habilitado</p>
+                    Contraseña <input type="password" name="contrasena" id="contrasena"> <br><br> Confirmar Contraseña <input type="password" name="confirmar_contrasena" id="confirmar_contrasena"> <br><br><br>
+                    <input type="submit" name="actualizar" value="Actualizar contraseña">
+                </form>
+            </div>
+        
+
+        <div id="derecha">
+            <img src="{{url_for('static', filename='images/Cataratas_y_paisaje.jpg')}}" width="600" height="400" />
+        </div>
+    </section>
+
+</body>
+
+</html>
