@@ -24,7 +24,7 @@
             <div class="dropleft mr-5">
                 <a class="nav-link btn btn-outline-primary" onclick="showOrHideLogin()" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Opciones <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-menu-sm" id="dropdown-menu">
-                    <a class="dropdown-item" href="/inicio">Inicio</a>
+                    <a class="dropdown-item" href="/inicio?userid={{userid}}">Inicio</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/index">Cerrar sesión</a>
                 </div>
@@ -55,18 +55,18 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <a href="/perfil">
-                            <button class="btn btn-block btn-outline-primary btn-sm">Información personal</button>
+                        <a href="/perfil/{{userid}}" class="btn btn-block btn-outline-primary btn-sm">
+                            Información personal
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <a href="/comentarios">
-                            <button class="btn btn-block btn-primary btn-sm">Mis comentarios</button>
+                        <a href="/comentarios/{{userid}}" class="btn btn-block btn-primary btn-sm">
+                            Mis comentarios
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <a href="/eliminar-cuenta">
-                            <button class="btn btn-block btn-outline-primary btn-sm">Eliminar cuenta</button>
+                        <a href="/eliminar-cuenta/{{userid}}" class="btn btn-block btn-outline-primary btn-sm">
+                            Eliminar cuenta
                         </a>
                     </div>
                 </div>

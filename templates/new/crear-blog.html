@@ -24,7 +24,7 @@
             <div class="dropdown mr-5">
                 <a class="nav-link btn btn-outline-primary" onclick="showOrHideLogin()" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Opciones <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-menu-sm" id="dropdown-menu">
-                    <a class="dropdown-item" href="/inicio">Inicio</a>
+                    <a class="dropdown-item" href="/inicio?userid={{userid}}">Inicio</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/index">Cerrar sesión</a>
                 </div>
@@ -43,43 +43,38 @@
                 </div>
             {% endif %}
         {% endwith %}
-        <form action="/guardar-blog" method="POST">
+        <form action="/guardar" method="POST">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <input class="form-control" name="titulo" placeholder="Titulo del blog">
-                                <input type="hidden" name="userid" value="{{userid}}">
-                            </div>
-                            <div class="form-group">
-                                Publico <input type="checkbox" name="privacidad">
-                            </div>
-                            <div class="form-group">
-                                <textarea class="form-control" name="cuerpo" cols="30" rows="9"></textarea>
-                            </div>
+                            <input type="text" name="titulo" class="form-control" placeholder="Ingrese el titulo del blog">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <textarea name="cuerpo" class="form-control" cols="30" rows="9" placeholder="Ingrese el contenido del blog"></textarea>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label for="privacidad"><input type="checkbox" id="privacidad" name="privacidad" checked> Publicar blog</label>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11"></div>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                            <div class="dropleft">
-                                <a class="nav-link btn btn-outline-white" onclick="showOrHideOptions()" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></i></a>
-                                <div class="dropdown-menu" id="dropdown-options">
-                                    <a class="dropdown-item">Eliminar</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item"><button type="submit" class="btn btn-default">Guardar</button></a>
-                                </div>
-                            </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <input type="hidden" name="userid" value="{{userid}}">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar blog</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-
     <footer class="text-muted mt-1">
         <div class="container">
             <div class="row">

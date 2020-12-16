@@ -12,7 +12,8 @@ app.secret_key = os.urandom(24)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('new/index.html')
+    blogs = obtenerblogs(limit = 3, publico = 1)
+    return render_template('new/index.html', blogs = blogs)
 
 @app.route('/registro')
 def registro():
@@ -100,80 +101,105 @@ def login():
             cursor = db.cursor()
 
             user = cursor.execute(
-                'SELECT * FROM usuario WHERE correo = ? AND clave = ?', (correo, clave)
+                'SELECT id FROM usuario WHERE correo = ? AND clave = ?', (correo, clave)
             ).fetchone()
 
             if user is None:
                 flash('Correo electrónico o contraseña invalidos')
                 return render_template('/new/index.html')
             else:
-                name = user[1] + ' ' + user[2]
                 userid = user[0]
-                return render_template('/new/inicio.html', name = name, userid = userid)
-        
-
+                
+                return redirect(url_for('inicio', userid = userid))
     except:
         flash('Error interno')
         return render_template('/new/index.html')
 
-@app.route('/inicio')
+@app.route('/inicio', methods=['GET'])
 def inicio():
-    return render_template('/new/inicio.html')
+    try:
+        userid = request.args.get('userid', default = 0, type = int)
+        db = get_db()
+        cursor = db.cursor()
+
+        user = cursor.execute(
+                'SELECT * FROM usuario WHERE id = ?', (str(userid))
+            ).fetchone()
+
+        name = user[1] + " " + user[2]
+
+        blogs = obtenerblogs(userid = userid)
+
+        return render_template('/new/inicio.html', userid = userid, name = name, blogs = blogs)
+    except:
+        flash("Error interno")
+        return render_template('/new/index.html')
 
 @app.route('/perfil')
-def perfil():
-    return render_template('/new/perfil.html')
+@app.route('/perfil/<userid>')
+def perfil(userid):
+    return render_template('/new/perfil.html', userid = userid)
 
 @app.route('/comentarios')
-def comentarios():
-    return render_template('/new/comentarios.html')
+@app.route('/comentarios/<userid>')
+def comentarios(userid):
+    return render_template('/new/comentarios.html', userid = userid)
 
 @app.route('/eliminar-cuenta')
-def eliminar_cuenta():
-    return render_template('/new/eliminar-cuenta.html')
+@app.route('/eliminar-cuenta/<userid>')
+def eliminar_cuenta(userid):
+    return render_template('/new/eliminar-cuenta.html', userid = userid)
 
 @app.route('/crear-blog')
 @app.route('/crear-blog/<userid>')
 def crear_blog(userid):
     return render_template('new/crear-blog.html', userid = userid)
 
-@app.route('/guardar-blog', methods=['POST'])
-def guardar_blog():
-    titulo = request.form['titulo']
-    userid = request.form['userid']
-    privacidad = request.form['privacidad']
-    cuerpo = request.form['cuerpo']
-    isError = False
+@app.route('/guardar', methods=['POST'])
+def guardar():
+    try:
+        userid = request.form['userid']
+        titulo = request.form['titulo']
+        cuerpo = request.form['cuerpo']
+        publico = request.form.get("privacidad") != None
+        isError = False
 
-    if not titulo:
-        flash('Debe ingresar un titulo para el blog')
-        idError = True
+        if not titulo or titulo == None:
+            flash('Debe ingresar un titulo para el blog')
+            isError = True
+        
+        if not cuerpo or cuerpo == None:
+            flash('Debe ingresar un contenido para el blog')
+            isError = True
+        
+        if isError:
+            return render_template('new/crear-blog.html', userid = userid)
+        else:
+            db = get_db()
 
-    if not cuerpo:
-        flash('Debe ingresar el contenido del blog')
-        idError = True
+            cursor = db.cursor()
+            sql="SELECT MAX(id) + 1 FROM Blog"
+            cursor.execute(sql)
+            results = cursor.fetchone()
+            maxid = results[0]
 
-    if isError:
-        return render_template('/new/inicio.html')
-    else:
-        db = get_db()
+            db.execute(
+                'INSERT INTO Blog (id,Titulo, cuerpo, privacidad, usuario) VALUES (?,?,?,?,?)',
+                (maxid,titulo,cuerpo,publico,userid)
+            )
 
-        cursor = db.cursor()
-        sql="SELECT MAX(id) + 1 FROM Blog"
-        cursor.execute(sql)
-        results = cursor.fetchone()
-        maxid = results[0]
+            db.commit()
 
-        flash(maxid)
+            if publico:
+                flash('Se ha publicado tu blog')
+            else:
+                flash('Tu blog ha sido guardado')
+            
+            return render_template('new/crear-blog.html', userid = userid)
 
-        db.execute(
-            'INSERT INTO Blog (id, Titulo, cuerpo, privacidad, usuario) VALUES (?,?,?,?,?);',
-            (maxid,titulo,cuerpo,privacidad,userid)
-        )
-
-        db.commit()
-        flash('Blog registrado')
-        return render_template('/new/inicio.html')
+    except:
+        flash('Error interno')
+        return render_template('new/index.html')
 
 #Funcion para enviar un correo
 def sendmail(mto, msubject, mcontents):
@@ -182,6 +208,19 @@ def sendmail(mto, msubject, mcontents):
             subject=msubject, 
             contents=mcontents)
 
+#Funcion para obtener blogs
+def obtenerblogs(limit=None, userid=None, publico=None):
+    db = get_db()
+
+    cursor = db.cursor()
+    limitclause = (" LIMIT " + str(limit)) if limit != None else ""
+    userclause = (" AND Blog.usuario = " + str(userid)) if userid != None else ""
+    publicclause = (" AND Blog.privacidad = " + str(publico)) if publico != None else ""
+
+    sql="SELECT Blog.*, usuario.nombres, usuario.apellidos FROM Blog INNER JOIN usuario on Blog.usuario = usuario.id WHERE 1=1" + userclause + publicclause + limitclause
+    cursor.execute(sql)
+    blogs = cursor.fetchall()
+    return blogs
 
 if __name__ == '__main__':
     app.run()

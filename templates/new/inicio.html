@@ -30,8 +30,8 @@
                 </div>
             </div>
         </ul>
-        <a class="nav-link btn btn-primary mr-2 ml-5" href="/perfil" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">{{name}}</a>
-        <a href="/perfil" class="btn btn-default border-primary"><i class="fa fa-user"></i></a>
+        <a class="nav-link btn btn-primary mr-2 ml-5" href="/perfil/{{userid}}" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">{{name}}</a>
+        <a href="/perfil/{{userid}}" class="btn btn-default border-primary"><i class="fa fa-user"></i></a>
     </nav>
     <div class="container-fluid">
         {% with messages = get_flashed_messages() %}
@@ -64,24 +64,14 @@
                     </div>
                     <div class="card-body">
                         <div class="slideshow-container" style="max-height: 290px !important;">
-                            <div class="mySlides">
-                                <strong class="blog-title">Lorem Ipsum 1</strong>
-                                <br>
-                                <q class="blog-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis volutpat tellus et odio ornare, et condimentum urna facilisis. Vivamus molestie diam sed ex mollis interdum. Nullam commodo iaculis iaculis. Nam suscipit erat quis risus feugiat, quis posuere ipsum venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum a lorem vitae metus fermentum mollis accumsan non nibh. Proin vestibulum nibh non eleifend euismod. Sed sit amet odio tempus, hendrerit lacus eget, bibendum mi. Fusce feugiat molestie nulla, non aliquet leo congue at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse pharetra imperdiet quam non volutpat. Etiam tempus a ante nec mattis. In ut vehicula lorem, eu feugiat nisi.</q>
-                                <p class="blog-author">- Richard McClintock</p>
-                            </div>
-                            <div class="mySlides">
-                                <strong class="blog-title">Lorem Ipsum 2</strong>
-                                <br>
-                                <q class="blog-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis volutpat tellus et odio ornare, et condimentum urna facilisis. Vivamus molestie diam sed ex mollis interdum. Nullam commodo iaculis iaculis. Nam suscipit erat quis risus feugiat, quis posuere ipsum venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum a lorem vitae metus fermentum mollis accumsan non nibh. Proin vestibulum nibh non eleifend euismod. Sed sit amet odio tempus, hendrerit lacus eget, bibendum mi. Fusce feugiat molestie nulla, non aliquet leo congue at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse pharetra imperdiet quam non volutpat. Etiam tempus a ante nec mattis. In ut vehicula lorem, eu feugiat nisi.</q>
-                                <p class="blog-author">- Richard McClintock</p>
-                            </div>
-                            <div class="mySlides">
-                                <strong class="blog-title">Lorem Ipsum 3</strong>
-                                <br>
-                                <q class="blog-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis volutpat tellus et odio ornare, et condimentum urna facilisis. Vivamus molestie diam sed ex mollis interdum. Nullam commodo iaculis iaculis. Nam suscipit erat quis risus feugiat, quis posuere ipsum venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum a lorem vitae metus fermentum mollis accumsan non nibh. Proin vestibulum nibh non eleifend euismod. Sed sit amet odio tempus, hendrerit lacus eget, bibendum mi. Fusce feugiat molestie nulla, non aliquet leo congue at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse pharetra imperdiet quam non volutpat. Etiam tempus a ante nec mattis. In ut vehicula lorem, eu feugiat nisi.</q>
-                                <p class="blog-author">- Richard McClintock</p>
-                            </div>
+                            {% for blog in blogs %}
+                                <div class="mySlides">
+                                    <strong class="blog-title">{{blog[1]}}</strong>
+                                    <br>
+                                    <q class="blog-body">{{blog[2]}}</q>
+                                    <p class="blog-author">{{blog[5] + ' ' + blog[6]}}</p>
+                                </div>
+                            {% endfor %}
                             <a class="prev" onclick="plusSlides(-1)">❮</a>
                             <a class="next" onclick="plusSlides(1)">❯</a>
                         </div>
@@ -89,9 +79,6 @@
                     <div class="card-footer text-center">
                         <div class="dot-container">
                             <button class="btn btn-primary mr-5">Comentarios</button>
-                            <span class="dot" onclick="currentSlide(1)"></span> 
-                            <span class="dot" onclick="currentSlide(2)"></span> 
-                            <span class="dot" onclick="currentSlide(3)"></span> 
                             <button class="btn btn-primary ml-5">Usar plantilla</button>
                         </div>
                     </div>
