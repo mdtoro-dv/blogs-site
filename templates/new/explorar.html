@@ -82,15 +82,37 @@
                                             <q class="blog-body">{{blog[2]}}</q>
                                         </div>
                                     </div>
-                                    <div class="row" style="height: 20%;">
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 d-flex align-items-center">
-                                            <button type="submit" class="btn btn-primary">Comentar</button>
+                                    <form action="/comentar/{{userid}}" method="POST">
+                                        <div class="row" style="height: 20%;">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 d-flex align-items-center">
+                                                <button type="submit" class="btn btn-primary">Comentar</button>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 d-flex align-items-center">
+                                                <input type="hidden" name="blogid" value="{{blog[0]}}">
+                                                <input type="text" name="comentario" class="form-control" placeholder="Ingrese su comentario">
+                                            </div>
                                         </div>
-                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 d-flex align-items-center">
-                                            <input type="text" name="comentario" class="form-control" placeholder="Ingrese su comentario">
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="card mt-1 mb-1">
+                        <div class="card-header">
+                            Comentarios
+                        </div>
+                        <div class="card-body">
+                            <div class="overflow-auto" style="max-height: 220px;">
+                                {% for comentario in comentarios %}
+                                    {% if comentario[2] == blog[0] %}
+                                        <div class="alert alert-light" role="alert">
+                                            <strong>{{comentario[4] + ' ' + comentario[5]}}</strong>
+                                            {{comentario[3]}}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

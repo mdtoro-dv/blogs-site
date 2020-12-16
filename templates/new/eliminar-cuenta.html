@@ -72,8 +72,14 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="col-lg-12 col-md 12 col-sm-12 col-xs-12">
+                    ¿Seguro que desea eliminar la cuenta?
+                </div>
             </div>
             <div class="card-footer">
+                <form action="/eliminar-cuenta/{{userid}}" method="POST">
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                </form>
             </div>
         </div>
     </div>

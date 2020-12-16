@@ -71,7 +71,7 @@ def registrarse():
 
             db.commit()
 
-            sendmail(correo, "Activa tu cuenta", "Bienvenido a Blogs Company, utiliza este enlace para activar tu cuenta. http://localhost:5000/activar")
+            sendmail(correo, "Activa tu cuenta", "Bienvenido a Blogs Company, utiliza este enlace para activar tu cuenta. http://localhost:5000/activar/" + str(maxid))
             flash('Se han registrado tus datos, revisa tu correo para activar tu cuenta')
             return render_template('new/registro.html')
 
@@ -101,19 +101,22 @@ def login():
             cursor = db.cursor()
 
             user = cursor.execute(
-                'SELECT id FROM usuario WHERE correo = ? AND clave = ?', (correo, clave)
+                'SELECT id, estado FROM usuario WHERE correo = ? AND clave = ?', (correo, clave)
             ).fetchone()
 
             if user is None:
                 flash('Correo electrónico o contraseña invalidos')
-                return render_template('/new/index.html')
+                return redirect(url_for('index'))
             else:
-                userid = user[0]
-                
-                return redirect(url_for('inicio', userid = userid))
+                if user[1] == 'I':
+                    flash('El usuario no se encuentra activado, ingresa al enlace de activación enviado a tu correo')
+                    return redirect(url_for('index'))
+                else:
+                    userid = user[0]
+                    return redirect(url_for('inicio', userid = userid))
     except:
         flash('Error interno')
-        return render_template('/new/index.html')
+        return redirect(url_for('index'))
 
 @app.route('/inicio', methods=['GET'])
 def inicio():
@@ -143,7 +146,8 @@ def perfil(userid):
 @app.route('/comentarios')
 @app.route('/comentarios/<userid>')
 def comentarios(userid):
-    return render_template('/new/comentarios.html', userid = userid)
+    comentarios = obtenercomentariosusuario(userid)
+    return render_template('/new/comentarios.html', userid = userid, comentarios = comentarios)
 
 @app.route('/eliminar-cuenta')
 @app.route('/eliminar-cuenta/<userid>')
@@ -208,14 +212,17 @@ def biblioteca(userid):
         try:
             searchtext = request.form['searchtext']
             blogs = obtenerblogs(userid = userid, searchtext = searchtext)
-            return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+            comentarios = obtenercomentarios()
+            return render_template('new/biblioteca.html', userid = userid, blogs = blogs, comentarios = comentarios)
         except:
             flash("Error interno")
             blogs = obtenerblogs(userid = userid)
-            return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+            comentarios = obtenercomentarios()
+            return render_template('new/biblioteca.html', userid = userid, blogs = blogs, comentarios = comentarios)
     else:
         blogs = obtenerblogs(userid = userid)
-        return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+        comentarios = obtenercomentarios()
+        return render_template('new/biblioteca.html', userid = userid, blogs = blogs, comentarios = comentarios)
 
 @app.route('/explorar/<userid>', methods=['POST', 'GET'])
 def explorar(userid):
@@ -224,15 +231,78 @@ def explorar(userid):
         try:
             searchtext = request.form['searchtext']
             blogs = obtenerblogs(searchtext = searchtext, publico = 1)
-            return render_template('new/explorar.html', userid = userid, blogs = blogs)
+            comentarios = obtenercomentarios()
+            return render_template('new/explorar.html', userid = userid, blogs = blogs, comentarios = comentarios)
         except:
             flash("Error interno")
             blogs = obtenerblogs(publico = 1)
-            return render_template('new/explorar.html', userid = userid, blogs = blogs)
+            comentarios = obtenercomentarios()
+            return render_template('new/explorar.html', userid = userid, blogs = blogs, comentarios = comentarios)
     else:
         blogs = obtenerblogs(publico = 1)
+        comentarios = obtenercomentarios()
+        return render_template('new/explorar.html', userid = userid, blogs = blogs, comentarios = comentarios)
+
+@app.route('/comentar/<userid>', methods=['POST'])
+def comentar(userid):
+    try:
+        blogid = request.form['blogid']
+        comentario = request.form['comentario']
+
+        db = get_db()
+
+        cursor = db.cursor()
+        sql="SELECT MAX(id) + 1 FROM comentario"
+        cursor.execute(sql)
+        results = cursor.fetchone()
+        maxid = results[0]
+
+        db.execute(
+            'INSERT INTO comentario (id,usuario,blog,comentario) VALUES (?,?,?,?)',
+            (maxid,userid,blogid,comentario)
+        )
+
+        db.commit()
+
+        blogs = obtenerblogs(publico = 1)
+        comentarios = obtenercomentarios()
+        return render_template('new/explorar.html', userid = userid, blogs = blogs, comentarios = comentarios)
+    except:
+        blogs = obtenerblogs(publico = 1)
+        flash("Error interno")
         return render_template('new/explorar.html', userid = userid, blogs = blogs)
 
+@app.route('/eliminar-cuenta/<userid>', methods=['POST'])
+def eliminarcuenta(userid):
+    try:
+        db = get_db()
+        db.execute(
+            'DELETE FROM usuario WHERE id = ?',
+            (userid)
+        )
+
+        db.commit()
+        flash("Se ha eliminado la cuenta")
+        return redirect(url_for('index'))
+    except:
+        flash("Error interno")
+        return redirect(url_for('index'))
+
+@app.route('/activar/<userid>')
+def activarcuenta(userid):
+    try:
+        db = get_db()
+        db.execute(
+            "update usuario set estado = 'A' where id = ?",
+            (userid)
+        )
+
+        db.commit()
+        flash("La cuenta ha sido activada")
+        return redirect(url_for('index'))
+    except:
+        flash("Error interno")
+        return redirect(url_for('index'))
 
 #Funcion para enviar un correo
 def sendmail(mto, msubject, mcontents):
@@ -255,6 +325,27 @@ def obtenerblogs(limit=None, userid=None, publico=None, searchtext=None):
     cursor.execute(sql)
     blogs = cursor.fetchall()
     return blogs
+
+#Funcion para obtener comentarios
+def obtenercomentarios():
+    db = get_db()
+
+    cursor = db.cursor()
+
+    sql="SELECT comentario.*, usuario.nombres, usuario.apellidos FROM comentario INNER JOIN usuario ON comentario.usuario = usuario.id"
+    cursor.execute(sql)
+    comentarios = cursor.fetchall()
+    return comentarios
+
+#Funcion para obtener los comentarios de un usuario especifico
+def obtenercomentariosusuario(userid):
+    db = get_db()
+
+    cursor = db.cursor()
+    sql = "SELECT comentario.*, usuario_blog.nombres, usuario_blog.apellidos,  Blog.Titulo, Blog.cuerpo FROM comentario INNER JOIN usuario ON comentario.usuario = usuario.id INNER JOIN Blog on comentario.blog = Blog.id INNER JOIN usuario AS usuario_blog on Blog.usuario = usuario_blog.id WHERE comentario.usuario = " + str(userid)
+    cursor.execute(sql)
+    comentarios = cursor.fetchall()
+    return comentarios
 
 if __name__ == '__main__':
     app.run()

@@ -71,7 +71,16 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body overflow-auto" style="max-height: 229px;">
+                {% for comentario in comentarios %}
+                <div class="alert alert-light" role="alert">
+                    <strong>{{comentario[4] + ' ' + comentario[5]}}</strong>
+                    {{comentario[6]}}
+                    <ul class=flashes>
+                        <li>{{ comentario[3] }}</li>
+                    </ul>
+                </div>
+                {% endfor %}
             </div>
             <div class="card-footer">
             </div>
