@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap/bootstrap.css')}}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/font-awesome/all.css')}}" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}" type="text/css">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/LetraB.jpg')}}" type="image/x-icon">
+    <title>The blogs company | Inicio</title>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm" id="main-header">
+        <ul id="pushleftmenu" class="navbar-nav">
+        <li class="nav-item">
+            <a href="/inicio?userid={{userid}}"><img src="{{url_for('static', filename='images/LetraB.jpg')}}" alt="LetraB" width="40" height="50" class="d-inline-block align-top"></a>
+        </li>
+        <h4 class="p-2">
+            The blogs company
+        </h4>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <div class="dropleft mr-5">
+                <a class="nav-link btn btn-outline-primary" onclick="showOrHideLogin()" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Opciones <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-menu-sm" id="dropdown-menu">
+                    <a class="dropdown-item" href="/inicio?userid={{userid}}">Inicio</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/index">Cerrar sesión</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    <ul class=flashes>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-8 align-self-end">
+                <form action="/biblioteca/{{userid}}" method="POST">    
+                    <div class="input-group d-flex align-items-center">
+                        <input type="text" name="searchtext" class="form-control form-control-sm" placeholder="Realizar una busqueda">
+                        <button type="submit" class="btn btn-outline-primary ml-2"><i class="fa fa-search fa-x3"></i></button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% for blog in blogs %}
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <div class="card mt-1 mb-1">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <p class="blog-author">{{blog[5] + ' ' + blog[6]}}</p>
+                                </div>
+                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                    <strong class="blog-title">{{blog[1]}}</strong>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                    <button class="btn btn-default btn-sm"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <img src="{{url_for('static', filename='images/foto.png')}}" alt="Imagen" style="width: 80%;">
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 d-flex align-items-center">
+                                    <q class="blog-body">{{blog[2]}}</q>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+<script src="{{url_for('static', filename='js/new/index.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap/JQuery.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap/bootstrap.bundle.min.js')}}"></script>
+</html>

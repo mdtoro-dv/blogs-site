@@ -128,7 +128,7 @@ def inicio():
 
         name = user[1] + " " + user[2]
 
-        blogs = obtenerblogs(userid = userid)
+        blogs = obtenerblogs(publico = 1)
 
         return render_template('/new/inicio.html', userid = userid, name = name, blogs = blogs)
     except:
@@ -201,6 +201,39 @@ def guardar():
         flash('Error interno')
         return render_template('new/index.html')
 
+@app.route('/biblioteca/<userid>', methods=['POST', 'GET'])
+def biblioteca(userid):
+
+    if request.method == 'POST':
+        try:
+            searchtext = request.form['searchtext']
+            blogs = obtenerblogs(userid = userid, searchtext = searchtext)
+            return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+        except:
+            flash("Error interno")
+            blogs = obtenerblogs(userid = userid)
+            return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+    else:
+        blogs = obtenerblogs(userid = userid)
+        return render_template('new/biblioteca.html', userid = userid, blogs = blogs)
+
+@app.route('/explorar/<userid>', methods=['POST', 'GET'])
+def explorar(userid):
+
+    if request.method == 'POST':
+        try:
+            searchtext = request.form['searchtext']
+            blogs = obtenerblogs(searchtext = searchtext, publico = 1)
+            return render_template('new/explorar.html', userid = userid, blogs = blogs)
+        except:
+            flash("Error interno")
+            blogs = obtenerblogs(publico = 1)
+            return render_template('new/explorar.html', userid = userid, blogs = blogs)
+    else:
+        blogs = obtenerblogs(publico = 1)
+        return render_template('new/explorar.html', userid = userid, blogs = blogs)
+
+
 #Funcion para enviar un correo
 def sendmail(mto, msubject, mcontents):
     yag = yagmail.SMTP('misionticgrupo9@gmail.com','Holamundo1')
@@ -209,15 +242,16 @@ def sendmail(mto, msubject, mcontents):
             contents=mcontents)
 
 #Funcion para obtener blogs
-def obtenerblogs(limit=None, userid=None, publico=None):
+def obtenerblogs(limit=None, userid=None, publico=None, searchtext=None):
     db = get_db()
 
     cursor = db.cursor()
     limitclause = (" LIMIT " + str(limit)) if limit != None else ""
     userclause = (" AND Blog.usuario = " + str(userid)) if userid != None else ""
     publicclause = (" AND Blog.privacidad = " + str(publico)) if publico != None else ""
+    searchclause = (" AND (Blog.titulo LIKE '%" + searchtext + "%' OR Blog.cuerpo LIKE '%" + searchtext + "%')") if searchtext != None else ""
 
-    sql="SELECT Blog.*, usuario.nombres, usuario.apellidos FROM Blog INNER JOIN usuario on Blog.usuario = usuario.id WHERE 1=1" + userclause + publicclause + limitclause
+    sql="SELECT Blog.*, usuario.nombres, usuario.apellidos FROM Blog INNER JOIN usuario on Blog.usuario = usuario.id WHERE 1=1" + userclause + publicclause + searchclause + limitclause
     cursor.execute(sql)
     blogs = cursor.fetchall()
     return blogs
