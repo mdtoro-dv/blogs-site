@@ -304,6 +304,66 @@ def activarcuenta(userid):
         flash("Error interno")
         return redirect(url_for('index'))
 
+@app.route('/editar-blog/<userid>', methods=['POST'])
+def editarblog(userid):
+    titulo = request.form['titulo']
+    cuerpo = request.form['cuerpo']
+    blogid = request.form['blogid']
+    return render_template('new/editar-blog.html', userid = userid, titulo = titulo, cuerpo = cuerpo, blogid = blogid)
+
+@app.route('/actualizar', methods=['POST'])
+def actualizarblog():
+    try:
+        blogid = request.form['blogid']
+        titulo = request.form['titulo']
+        cuerpo = request.form['cuerpo']
+        publico = request.form.get("privacidad") != None
+        userid = request.form['userid']
+        isError = False
+
+        if not titulo or titulo == None:
+            flash('Debe ingresar un titulo para el blog')
+            isError = True
+        
+        if not cuerpo or cuerpo == None:
+            flash('Debe ingresar un contenido para el blog')
+            isError = True
+        
+        if isError:
+            return render_template('new/editar-blog.html', userid = userid, titulo = titulo, cuerpo = cuerpo)
+        else:
+            db = get_db()
+            db.execute(
+                "UPDATE Blog SET Titulo = ?, cuerpo = ?, privacidad = ? WHERE id = ?",
+                (titulo, cuerpo, publico, blogid)
+            )
+            
+            db.commit()
+            flash("El blog ha sido actualizado")
+            return redirect(url_for('inicio', userid = userid))
+
+    except:
+        userid = request.form['userid']
+        flash('Error interno')
+        return redirect(url_for('inicio', userid = userid))
+
+@app.route('/eliminar-blog/<userid>', methods=['POST'])
+def eliminarblog(userid):
+    try:
+        blogid = request.form['blogid']
+        db = get_db()
+        db.execute(
+            'DELETE FROM Blog WHERE id = ?',
+            (blogid)
+        )
+
+        db.commit()
+        flash("Se ha eliminado el blog")
+        return redirect(url_for('inicio', userid = userid))
+    except:
+        flash("Error interno")
+        return redirect(url_for('inicio', userid = userid))
+
 #Funcion para enviar un correo
 def sendmail(mto, msubject, mcontents):
     yag = yagmail.SMTP('misionticgrupo9@gmail.com','Holamundo1')
