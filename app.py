@@ -71,7 +71,7 @@ def registrarse():
 
             db.commit()
 
-            sendmail(correo, "Activa tu cuenta", "Bienvenido a Blogs Company, utiliza este enlace para activar tu cuenta. http://localhost:5000/activar/" + str(maxid))
+            sendmail(correo, "Activa tu cuenta", "Bienvenido a Blogs Company, utiliza este enlace para activar tu cuenta. http://3.134.84.146:443/activar/" + str(maxid))
             flash('Se han registrado tus datos, revisa tu correo para activar tu cuenta')
             return render_template('new/registro.html')
 
