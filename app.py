@@ -165,6 +165,7 @@ def guardar():
         userid = request.form['userid']
         titulo = request.form['titulo']
         cuerpo = request.form['cuerpo']
+        ruta = request.form['ruta']
         publico = request.form.get("privacidad") != None
         isError = False
 
