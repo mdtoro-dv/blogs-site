@@ -1,0 +1,6 @@
+#!/bin/bash
+echo Starting web-site
+cd /home/ubuntu/web-site
+source env/Scripts/activate
+gunicorn -b :8000 --certfile=certificate.crt --keyfile=grupoeuninorte.pem wsgi:a
+#gunicorn -b 172.31.35.158:443 --certfile=certificate.crt --keyfile=grupoeuninorte.pem wsgi:app
